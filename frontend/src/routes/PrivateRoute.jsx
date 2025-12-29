@@ -1,17 +1,17 @@
 import React from "react";
-import { Navigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { selectIsAuthenticated } from "../redux/selectors/authSelectors";
+import { Navigate, useLocation } from "react-router-dom";
 
-const PrivateRoute = ({ children, roles = [] }) => {
-    const isAuthenticated = useSelector(selectIsAuthenticated);
-    const userRole = useSelector((state) => state.auth.user?.role);
+const ProtectedRoute = ({ children }) => {
+    const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+    const location = useLocation();
 
-    if (!isAuthenticated) return <Navigate to="/auth/login" replace />;
-
-    if (roles.length && !roles.includes(userRole)) return <Navigate to="/" replace />;
+    if (!isAuthenticated) {
+        // Redirect to login page, preserve the location for after login
+        return <Navigate to="/auth/login" state={{ from: location }} replace />;
+    }
 
     return children;
 };
 
-export default PrivateRoute;
+export default ProtectedRoute;

@@ -1,21 +1,22 @@
 // src/components/layout/MainLayout/AuthLayout.jsx
 import React from "react";
-import { Outlet, Navigate } from "react-router-dom";
+import { Outlet, Navigate, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { ROUTES } from "../../../routes/routes";
 
 const AuthLayout = () => {
     const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+    const location = useLocation();
 
-    // Redirect logged-in users away from login/register pages
-    const authPages = ["/login", "/register", "/forgot-password"];
-    const currentPath = window.location.pathname;
+    const authPages = [ROUTES.LOGIN, ROUTES.REGISTER, ROUTES.FORGOT_PASSWORD];
 
-    if (isAuthenticated && authPages.includes(currentPath)) {
-        return <Navigate to="/user/dashboard" replace />;
+    // Redirect logged-in users away from auth pages
+    if (isAuthenticated && authPages.includes(location.pathname)) {
+        return <Navigate to={ROUTES.USER_DASHBOARD} replace />;
     }
 
     return (
-        <div className="flex min-h-screen flex-col">
+        <div className="flex flex-col min-h-screen">
             <Outlet />
         </div>
     );

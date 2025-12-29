@@ -1,92 +1,82 @@
-// src/routes/AppRouter.jsx
 import React from "react";
-import { Routes, Route, Navigate, Outlet } from "react-router-dom";
-import { useSelector } from "react-redux";
-import { routes, publicRoutes, protectedRoutes } from "./routes";
+import { Routes, Route } from "react-router-dom";
+import { ROUTES } from "./routes";
 
 // Layouts
 import MainLayout from "../components/layout/MainLayout/MainLayout";
 import AuthLayout from "../components/layout/MainLayout/AuthLayout";
-import ScrollToTop from "../components/shared/ScrollToTop/ScrollToTop";
+import DashboardLayout from "../components/layout/MainLayout/DashboardLayout";
 
-// ProtectedRoute wrapper
-const ProtectedRoute = ({ element: Element, roles }) => {
-    const user = useSelector((state) => state.auth.user);
-    const isLoggedIn = !!user;
+// Pages
+import HomePage from "../pages/Home/HomePage";
+import ShopPage from "../pages/Shop/ShopPage";
+import ProductDetailsPage from "../pages/ProductDetails/ProductDetailsPage";
+import CartPage from "../pages/Cart/CartPage";
+import CheckoutPage from "../pages/Checkout/CheckoutPage";
+import OrderSuccessPage from "../pages/OrderSuccess/OrderSuccessPage";
 
-    if (!isLoggedIn) return <Navigate to={routes.login} replace />;
-    if (roles && !roles.includes(user.role)) return <Navigate to={routes.home} replace />;
+import LoginPage from "../pages/Auth/LoginPage";
+import RegisterPage from "../pages/Auth/RegisterPage";
+import ForgotPasswordPage from "../pages/Auth/ForgotPasswordPage";
 
-    return <Element />;
-};
+import UserDashboard from "../pages/User/Dashboard/UserDashboard";
+import ProfilePage from "../pages/User/Profile/ProfilePage";
+import OrdersPage from "../pages/User/Orders/OrdersPage";
+import WishlistPage from "../pages/User/Wishlist/WishlistPage";
+import SettingsPage from "../pages/User/Settings/SettingsPage";
 
-// Layout wrappers using Outlet
-const MainLayoutWrapper = () => (
-    <MainLayout>
-        <Outlet />
-    </MainLayout>
-);
+import CategoryPage from "../pages/Category/CategoryPage";
+import SearchPage from "../pages/Search/SearchPage";
+import AboutPage from "../pages/About/AboutPage";
+import ContactPage from "../pages/Contact/ContactPage";
+import FAQPage from "../pages/FAQ/FAQPage";
+import TermsPage from "../pages/Terms/TermsPage";
+import PrivacyPage from "../pages/Privacy/PrivacyPage";
+import NotFoundPage from "../pages/NotFound/NotFoundPage";
 
-const AuthLayoutWrapper = () => (
-    <AuthLayout>
-        <Outlet />
-    </AuthLayout>
-);
+// Route guards
+import ProtectedRoute from "./PrivateRoute";
+import PublicRoute from "./PublicRoute";
 
 const AppRouter = () => {
     return (
-        <>
-            <ScrollToTop />
+        <Routes>
+            {/* Public routes */}
+            <Route element={<MainLayout />}>
+                <Route path={ROUTES.HOME} element={<HomePage />} />
+                <Route path={ROUTES.SHOP} element={<ShopPage />} />
+                <Route path={ROUTES.PRODUCT_DETAILS} element={<ProductDetailsPage />} />
+                <Route path={ROUTES.CART} element={<CartPage />} />
+                <Route path={ROUTES.CHECKOUT} element={<CheckoutPage />} />
+                <Route path={ROUTES.ORDER_SUCCESS} element={<OrderSuccessPage />} />
+                <Route path={ROUTES.CATEGORY} element={<CategoryPage />} />
+                <Route path={ROUTES.SEARCH} element={<SearchPage />} />
+                <Route path={ROUTES.ABOUT} element={<AboutPage />} />
+                <Route path={ROUTES.CONTACT} element={<ContactPage />} />
+                <Route path={ROUTES.FAQ} element={<FAQPage />} />
+                <Route path={ROUTES.TERMS} element={<TermsPage />} />
+                <Route path={ROUTES.PRIVACY} element={<PrivacyPage />} />
+            </Route>
 
-            <Routes>
-                {/* Public routes */}
-                <Route element={<MainLayoutWrapper />}>
-                    {publicRoutes
-                        .filter(
-                            ({ path }) =>
-                                ![routes.login, routes.register, routes.forgotPassword].includes(path)
-                        )
-                        .map(({ path, element: Element }) => (
-                            <Route key={path} path={path} element={<Element />} />
-                        ))}
-                </Route>
+            {/* Auth routes */}
+            <Route element={<PublicRoute><AuthLayout /></PublicRoute>}>
+                <Route path={ROUTES.LOGIN} element={<LoginPage />} />
+                <Route path={ROUTES.REGISTER} element={<RegisterPage />} />
+                <Route path={ROUTES.FORGOT_PASSWORD} element={<ForgotPasswordPage />} />
+            </Route>
 
-                {/* Auth routes */}
-                <Route element={<AuthLayoutWrapper />}>
-                    {publicRoutes
-                        .filter(({ path }) =>
-                            [routes.login, routes.register, routes.forgotPassword].includes(path)
-                        )
-                        .map(({ path, element: Element }) => (
-                            <Route key={path} path={path} element={<Element />} />
-                        ))}
-                </Route>
+            {/* Dashboard routes (protected) */}
+            <Route path="/user" element={<ProtectedRoute><DashboardLayout /></ProtectedRoute>}>
+                <Route path="dashboard" element={<UserDashboard />} />
+                <Route path="profile" element={<ProfilePage />} />
+                <Route path="orders" element={<OrdersPage />} />
+                <Route path="wishlist" element={<WishlistPage />} />
+                <Route path="settings" element={<SettingsPage />} />
+            </Route>
 
-                {/* Protected routes */}
-                {protectedRoutes.map(({ path, element: Element, roles }) => (
-                    <Route
-                        key={path}
-                        path={path}
-                        element={<ProtectedRoute element={Element} roles={roles} />}
-                    />
-                ))}
-
-                {/* 404 */}
-                <Route
-                    path="*"
-                    element={
-                        <MainLayout>
-                            <div className="container mx-auto mt-20 text-center">
-                                <h1 className="text-4xl font-bold">404 - Page Not Found</h1>
-                                <p className="mt-4 text-gray-600">
-                                    The page you are looking for does not exist.
-                                </p>
-                            </div>
-                        </MainLayout>
-                    }
-                />
-            </Routes>
-        </>
+            {/* 404 fallback */}
+            <Route path={ROUTES.NOT_FOUND} element={<NotFoundPage />} />
+        </Routes>
     );
 };
 
