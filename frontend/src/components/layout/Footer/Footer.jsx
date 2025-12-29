@@ -1,91 +1,144 @@
-// src/components/layout/Footer/Footer.jsx
-import React from "react";
-import { FaFacebookF, FaTwitter, FaInstagram, FaLinkedinIn } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 const Footer = () => {
-    const footerLinks = [
-        { title: "Shop", links: ["All Products", "New Arrivals", "Best Sellers", "Sale"] },
-        { title: "Company", links: ["About Us", "Careers", "Blog", "Contact"] },
-        { title: "Support", links: ["Help Center", "Shipping", "Returns", "FAQs"] },
-    ];
-
-    const paymentIcons = [
-        "/assets/images/payment-icons/visa.svg",
-        "/assets/images/payment-icons/mastercard.svg",
-        "/assets/images/payment-icons/paypal.svg",
-        "/assets/images/payment-icons/bkash.svg",
-    ];
-
     return (
-        <footer className="border-t border-gray-700 bg-gray-900 pt-12 text-gray-200">
-            <div className="container mx-auto grid grid-cols-1 gap-8 px-4 md:grid-cols-4">
-                {/* Logo & About */}
-                <div>
-                    <img
-                        src="/assets/images/logo.svg"
-                        alt="Logo"
-                        className="mb-4 w-32"
-                    />
-                    <p className="text-sm text-gray-400">
-                        YourBrand is the best place to find amazing products at unbeatable prices.
-                    </p>
-                    <div className="mt-4 flex gap-3">
-                        <a href="#" className="transition hover:text-red-500">
-                            <FaFacebookF />
-                        </a>
-                        <a href="#" className="transition hover:text-red-500">
-                            <FaTwitter />
-                        </a>
-                        <a href="#" className="transition hover:text-red-500">
-                            <FaInstagram />
-                        </a>
-                        <a href="#" className="transition hover:text-red-500">
-                            <FaLinkedinIn />
-                        </a>
-                    </div>
-                </div>
+        <footer className="text-gray-300 bg-gray-900">
+            <div className="px-6 mx-auto max-w-7xl py-14">
 
-                {/* Footer Links */}
-                {footerLinks.map((section, idx) => (
-                    <div key={idx}>
-                        <h3 className="mb-4 text-lg font-semibold">{section.title}</h3>
-                        <ul className="space-y-2 text-gray-400">
-                            {section.links.map((link, i) => (
-                                <li key={i}>
-                                    <a href="#" className="transition hover:text-red-500">
-                                        {link}
-                                    </a>
-                                </li>
-                            ))}
+                {/* Top Section */}
+                <div className="grid gap-10 sm:grid-cols-2 md:grid-cols-4">
+
+                    {/* Brand */}
+                    <div>
+                        <h2 className="mb-4 text-2xl font-bold text-white">
+                            Ecomerce
+                        </h2>
+                        <p className="text-sm text-gray-400">
+                            Clean products. Real quality.
+                            Built for modern shoppers.
+                        </p>
+                    </div>
+
+                    {/* Quick Links */}
+                    <div>
+                        <h3 className="mb-4 text-lg font-semibold text-white">
+                            Quick Links
+                        </h3>
+                        <ul className="space-y-2 text-sm">
+                            <li>
+                                <Link to="/" className="transition hover:text-white">
+                                    Home
+                                </Link>
+                            </li>
+                            <li>
+                                <Link to="/shop" className="transition hover:text-white">
+                                    Shop
+                                </Link>
+                            </li>
+                            <li>
+                                <Link to="/about" className="transition hover:text-white">
+                                    About
+                                </Link>
+                            </li>
+                            <li>
+                                <Link to="/contact" className="transition hover:text-white">
+                                    Contact
+                                </Link>
+                            </li>
                         </ul>
                     </div>
-                ))}
 
-                {/* Newsletter */}
-                <div className="md:col-span-1">
-                    <h3 className="mb-4 text-lg font-semibold">Subscribe to our Newsletter</h3>
-                    <div className="flex flex-col gap-2 sm:flex-row">
-                        <input
-                            type="email"
-                            placeholder="Enter your email"
-                            className="flex-1 rounded border border-gray-700 bg-gray-800 px-3 py-2 text-gray-200 focus:outline-none focus:ring-2 focus:ring-red-500"
-                        />
-                        <button className="rounded bg-red-600 px-4 py-2 text-white transition hover:bg-red-700">
-                            Subscribe
-                        </button>
+                    {/* Support */}
+                    <div>
+                        <h3 className="mb-4 text-lg font-semibold text-white">
+                            Support
+                        </h3>
+
+                        <ul className="space-y-2 text-sm">
+                            <li>
+                                <Link
+                                    to="/faq"
+                                    className="transition cursor-pointer hover:text-white"
+                                >
+                                    FAQ
+                                </Link>
+                            </li>
+
+                            <li>
+                                <Link
+                                    to="/privacy-policy"
+                                    className="transition cursor-pointer hover:text-white"
+                                >
+                                    Privacy Policy
+                                </Link>
+                            </li>
+
+                            <li>
+                                <Link
+                                    to="/terms"
+                                    className="transition cursor-pointer hover:text-white"
+                                >
+                                    Terms & Conditions
+                                </Link>
+                            </li>
+
+                            <li>
+                                <Link
+                                    to="/refund-policy"
+                                    className="transition cursor-pointer hover:text-white"
+                                >
+                                    Refund Policy
+                                </Link>
+                            </li>
+                        </ul>
                     </div>
 
-                    {/* Payment Icons */}
-                    <div className="mt-6 flex gap-3">
-                        {paymentIcons.map((icon, i) => (
-                            <img key={i} src={icon} alt="payment" className="h-6" />
-                        ))}
+                    {/* Newsletter */}
+                    <div>
+                        <h3 className="mb-4 text-lg font-semibold text-white">
+                            Newsletter
+                        </h3>
+                        <p className="mb-4 text-sm text-gray-400">
+                            Drop your email — we only send fire updates 🔥
+                        </p>
+
+                        <form className="flex">
+                            <input
+                                type="email"
+                                placeholder="Email address"
+                                className="w-full px-4 py-2 text-sm text-white placeholder-gray-500 bg-gray-800 outline-none rounded-l-xl focus:ring-2 focus:ring-gray-600"
+                            />
+                            <button
+                                type="submit"
+                                className="px-4 py-2 text-sm font-semibold text-white transition bg-gray-700 rounded-r-xl hover:bg-gray-600"
+                            >
+                                Join
+                            </button>
+                        </form>
                     </div>
                 </div>
-            </div>
 
-            <div className="mt-8 text-center text-sm text-gray-500">
-                &copy; {new Date().getFullYear()} YourBrand. All rights reserved.
+                {/* Divider */}
+                <div className="w-full h-px my-10 bg-gray-800"></div>
+
+                {/* Bottom */}
+                <div className="flex flex-col items-center justify-between gap-4 text-sm sm:flex-row">
+                    <p className="text-gray-500">
+                        © {new Date().getFullYear()} Ecomerce. All rights reserved.
+                    </p>
+
+                    <div className="flex gap-4">
+                        <span className="transition cursor-pointer hover:text-white">
+                            Facebook
+                        </span>
+                        <span className="transition cursor-pointer hover:text-white">
+                            Instagram
+                        </span>
+                        <span className="transition cursor-pointer hover:text-white">
+                            Twitter
+                        </span>
+                    </div>
+                </div>
             </div>
         </footer>
     );

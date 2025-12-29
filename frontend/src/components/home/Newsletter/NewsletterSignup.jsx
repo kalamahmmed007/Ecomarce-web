@@ -1,40 +1,66 @@
-// src/components/home/Newsletter/NewsletterSignup.jsx
 import { useState } from "react";
+import axios from "axios";
 
 const NewsletterSignup = () => {
     const [email, setEmail] = useState("");
-    const [submitted, setSubmitted] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const [message, setMessage] = useState("");
 
-    const handleSubmit = e => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        // fake submission
-        setSubmitted(true);
+        setLoading(true);
+        setMessage("");
+
+        try {
+            await axios.post("http://localhost:5000/api/newsletter", { email });
+            setMessage("Subscribed successfully 🥱");
+            setEmail("");
+        } catch (error) {
+            setMessage("Already subscribed 🤓");
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
-        <section className="bg-blue-50 py-12">
-            <div className="mx-auto max-w-lg text-center">
-                <h2 className="mb-4 text-2xl font-semibold">Subscribe to Our Newsletter</h2>
-                <p className="mb-6 text-gray-600">Get the latest deals and updates directly in your inbox</p>
-                {submitted ? (
-                    <p className="font-semibold text-green-600">Thank you for subscribing!</p>
-                ) : (
-                    <form className="flex gap-2" onSubmit={handleSubmit}>
-                        <input
-                            type="email"
-                            placeholder="Your email"
-                            className="flex-1 rounded border border-gray-300 p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            value={email}
-                            onChange={e => setEmail(e.target.value)}
-                            required
-                        />
-                        <button type="submit" className="rounded bg-blue-600 px-4 text-white transition hover:bg-blue-700">
-                            Subscribe
-                        </button>
-                    </form>
+        <div className="w-full px-4 py-16 bg-gradient-to-br from-gray-100 to-gray-200">
+            <div className="max-w-3xl p-8 mx-auto bg-gray-100 border border-gray-300 shadow-lg rounded-2xl">
+
+                <h2 className="mb-2 text-3xl font-bold text-center text-gray-800">
+                    Newsletter
+                </h2>
+                <p className="mb-6 text-center text-gray-600">
+                    No spam. Just clean updates.
+                </p>
+
+                <form
+                    onSubmit={handleSubmit}
+                    className="flex flex-col gap-4 sm:flex-row"
+                >
+                    <input
+                        type="email"
+                        required
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        placeholder="Enter your email"
+                        className="flex-1 px-5 py-3 text-gray-800 placeholder-gray-400 transition bg-white border border-gray-300 outline-none rounded-xl focus:border-gray-500 focus:ring-2 focus:ring-gray-300"
+                    />
+
+                    <button
+                        disabled={loading}
+                        className="px-8 py-3 font-semibold text-white transition bg-gray-800 rounded-xl hover:bg-gray-700 disabled:opacity-50"
+                    >
+                        {loading ? "Sending..." : "Subscribe"}
+                    </button>
+                </form>
+
+                {message && (
+                    <p className="mt-4 text-sm text-center text-gray-700">
+                        {message}
+                    </p>
                 )}
             </div>
-        </section>
+        </div>
     );
 };
 
